@@ -1,3 +1,5 @@
+var app = angular.module('myApp', []);
+
 function createMinefield() {
   var minefield = {};
   minefield.rows = [];
@@ -10,6 +12,7 @@ function createMinefield() {
           var spot = {};
           spot.isCovered = true;
           spot.content = "empty"; 
+          spot.isflag = false; 
           row.spots.push(spot);
       }
       
@@ -157,14 +160,37 @@ function hasWon(minefield) {
 function MinesweeperController($scope) {
   $scope.minefield = createMinefield();
   $scope.uncoverSpot = function(spot) {
-      spot.isCovered = false;
-      if(spot.content == "mine") {
-          $scope.hasLostMessageVisible = true;
-      } else {
-          if(hasWon($scope.minefield)) {
-              $scope.isWinMessageVisible = true;
-          }
-      }
+  	  if(!spot.isflag) {
+  	  	  spot.isCovered = false;
+  	  	  if(spot.content == "mine") {
+	          $scope.hasLostMessageVisible = true;
+	      } else {
+	          if(hasWon($scope.minefield)) {
+	              $scope.isWinMessageVisible = true;
+	          }
+	      }
+  	  }            
+  };
+  $scope.flag = function(spot){
+  	  if(!spot.isflag) {
+  	  	  spot.isflag = true;
+  	  } else {
+  	  	  spot.isflag = false;
+  	  }
   };
 }
+
+
+
+app.directive('ngRightClick', function($parse) {
+    return function(scope, element, attrs) {
+        var fn = $parse(attrs.ngRightClick);
+        element.bind('contextmenu', function(event) {
+            scope.$apply(function() {
+                event.preventDefault();
+                fn(scope, {$event:event});
+            });
+        });
+    };
+});
 

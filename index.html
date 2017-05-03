@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app>
+<html ng-app="myApp">
   <head>
       <link rel="stylesheet" href="css\styles.css">
       <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.6/angular.min.js"></script>
@@ -10,8 +10,8 @@
      <h3 ng-if="hasLostMessageVisible">You Lost!</h3>
      <table class="minefield">
          <tr ng-repeat="row in minefield.rows">
-             <td ng-repeat="spot in row.spots" ng-click="uncoverSpot(spot)">
-                <img ng-if="spot.isCovered" src="image\block.png">
+             <td ng-repeat="spot in row.spots" ng-click="uncoverSpot(spot)" ng-right-click="flag(spot)">
+                <img ng-if="spot.isCovered && !spot.isflag" src="image\block.png">
                 <img ng-if="!spot.isCovered && spot.content == 'empty'" src="image\empty.png">
                 <img ng-if="!spot.isCovered && spot.content == 'mine'" src="image\mine.png">
                 <img ng-if="!spot.isCovered && spot.content == 1" src="image\number-1.png">
@@ -22,6 +22,7 @@
                 <img ng-if="!spot.isCovered && spot.content == 6" src="image\number-6.png">
                 <img ng-if="1spot.isCovered && spot.content == 7" src="image\number-7.png">
                 <img ng-if="!spot.isCovered && spot.content == 8" src="image\number-8.png">
+                <img ng-if="spot.isCovered && spot.isflag" src="image\flag.png">
              </td>
          </tr>
      </table>
